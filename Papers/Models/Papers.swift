@@ -16,13 +16,11 @@ struct Paper: Identifiable {
     var name: String
     var userDescription: String
     var rectoImage: UIImage
-//    var versoImage: CKAsset?
-    var addDate: Date
+    var versoImage: UIImage
     var expirationDate: Date
-//    var category: CKRecord.Reference?
+    var addDate: Date
+    var category: PaperCategory?
 }
 
 
-class Papers: ObservableObject {
-    @Published var papers =  [Paper]()
-}
+
