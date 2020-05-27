@@ -14,6 +14,11 @@ import CloudKit
 struct HomeView: View {
     @ObservedObject  var papers = PapersViewModel()
     @ObservedObject var paperCategory = PaperCategoryViewModel()
+    
+    init() {
+        UITableView.appearance().separatorStyle = .none
+    }
+
     var body: some View {
         LoadingView(isShowing: .constant(self.paperCategory.loading)) {
             NavigationView {
@@ -24,8 +29,6 @@ struct HomeView: View {
                 }
                 .navigationBarTitle("Papers")
             }
-            .onAppear {UITableView.appearance().separatorColor = .clear}
-            .onDisappear{UITableView.appearance().separatorColor = .clear}
         }
     }
 }

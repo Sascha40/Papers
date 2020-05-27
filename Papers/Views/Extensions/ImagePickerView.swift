@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ImagePickerView: UIViewControllerRepresentable {
     @Binding var isVisible: Bool
-    @Binding var image: Image?
+    @Binding var image: UIImage?
     var sourceType: Int
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
@@ -31,8 +31,8 @@ struct ImagePickerView: UIViewControllerRepresentable {
     
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         @Binding var isVisible: Bool
-        @Binding var image: Image?
-        init(isVisible: Binding<Bool>, image: Binding<Image?>){
+        @Binding var image: UIImage?
+        init(isVisible: Binding<Bool>, image: Binding<UIImage?>){
             _isVisible = isVisible
             _image = image
         }
@@ -40,7 +40,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             let uiimage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
             
-            image = Image(uiImage: uiimage)
+            image = uiimage
             isVisible = false
         }
         

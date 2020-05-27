@@ -19,7 +19,7 @@ class PapersViewModel: ObservableObject {
     }
     
     private func fetchPapers() {
-        CloudKitHelper.fetchPapers { (result) in
+        CloudKitHelper.fetchPaper { (result) in
             switch result {
             case .success(let newPaper):
                 self.papers.append(newPaper)

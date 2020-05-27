@@ -16,6 +16,7 @@ struct MenuItemView: View {
     var body: some View {
         color
             .frame(height: 80)
+            .shadow(radius: 10)
             .cornerRadius(15)
             .overlay(
                 VStack {
@@ -25,8 +26,10 @@ struct MenuItemView: View {
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
                         .lineLimit(3)
-                }.padding(10)
+                }
+                .padding(10)
         )
+            
     }
 }
 

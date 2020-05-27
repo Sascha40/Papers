@@ -18,7 +18,7 @@ class PaperCategoryViewModel: ObservableObject {
     }
     
     private func fetchPaperCategories(){
-        CloudKitHelper.fetchPaperCategories { (result) in
+        CloudKitHelper.fetchPaperCategory { (result) in
             switch result {
             case .success(let newCategory):
                 self.paperCategory.append(newCategory)

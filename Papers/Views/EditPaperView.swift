@@ -12,6 +12,7 @@ struct EditPaperView: View {
     @Binding var isPresented: Bool
     @State private var selectorIndex = 0
     @ObservedObject var categories = PaperCategoryViewModel()
+    
     var body: some View {
         VStack {
             VStack(alignment: .leading) {
@@ -20,7 +21,10 @@ struct EditPaperView: View {
                         .font(Font.custom("Avenir-black", size: 25))
                         .foregroundColor(Color.init(red: 69/255, green: 140/255, blue: 157/255))
                     Spacer()
-                    Button(action: { self.isPresented = false}, label:{
+                    Button(action: {
+                        self.isPresented = false
+                        print(self.categories.paperCategory[2])
+                    }, label:{
                         Image(systemName: "xmark.circle.fill")
                             .resizable()
                             .foregroundColor(Color.init(red: 69/255, green: 140/255, blue: 157/255))

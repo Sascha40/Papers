@@ -9,40 +9,53 @@
 import SwiftUI
 
 struct PaperView: View {
-    let paper: Paper
-    @EnvironmentObject var papers: PapersViewModel
+    var passedPaper: Paper
+    
     var body: some View {
-        VStack {
-            ScrollView(.horizontal) {
-                HStack(spacing: 15) {
-                    Image(uiImage: paper.rectoImage)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 300)
-                        .cornerRadius(10)
-                    Image(uiImage: paper.versoImage)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 300)
-                        .cornerRadius(10)
+        NavigationView {
+            VStack {
+                HStack {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 20) {
+                            Image(uiImage: self.passedPaper.rectoImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 310, height: 230)
+                                .cornerRadius(15)
+                            
+                            
+                            Image(uiImage: self.passedPaper.versoImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 310, height:230)
+                                .cornerRadius(15)
+                            
+                        }
+                    }
+                    .frame(height: 240)
+                    .shadow(radius: 10)
                 }
-            }
-            .shadow(radius: 5)
-            VStack(alignment: .leading) {
-                Text("Description")
-                    .font(.title)
-                Text("\(paper.userDescription)")
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                
-                if paper.category != nil {
-                    Text(paper.category!.name)
+                VStack(alignment: .leading) {
+                    Text("Description")
+                        .font(.title)
+                    Text("\(self.passedPaper.userDescription)")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                    
+                    Text("Type de paper : \(self.passedPaper.category!.name)")
                 }
+                Spacer()
+                    .padding()
             }
         }
-        .padding()
-        .edgesIgnoringSafeArea(.top)
+        .navigationBarTitle(self.passedPaper.name)
     }
 }
 
 
+//
+//struct PaperView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PaperView(passedPaper: Paper(name: "test", userDescription: "test", rectoImage: UIImage(named: "recto")!, versoImage: UIImage(named: "verso")!, expirationDate: Date(), addDate: Date()))
+//    }
+//}

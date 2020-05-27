@@ -10,8 +10,11 @@ import Foundation
 import CloudKit
 import SwiftUI
 
+
 struct CloudKitHelper {
     
+    @EnvironmentObject  var papers: PapersViewModel
+
     struct RecordType {
         static let Paper = "Paper"
         static let PaperCategory = "PaperCategory"
@@ -24,54 +27,105 @@ struct CloudKitHelper {
         case cursorFailure
     }
     
-    /* Fonction Save
+    /* Fonction savePaper, permet de save un paper.
+        Retourne une closure qui retourne un résultat détenant une enum avec deux cas Success ou Failure.
      @escaping signifie que quand une closure est passé en argument de fonction elle reste en mémoire même après l'éxecution. Utile pour l'asynchrone.
      */
     
-    //    static func save(paper: Paper, completion: @escaping(Result<Paper, Error>) ->Void) {
-    //        let paperRecord = CKRecord(recordType: RecordType.Paper)
-    //
-    //        let paperRectoImageData: NSData = NSData(data: paper.rectoImage.pngData()!)
-    //        let paperVersoImageData: NSData = NSData(data: paper.versoImage.pngData()!)
-    //
-    //        paperRecord["name"] = paper.name as CKRecordValue
-    //        paperRecord["addDate"] = paper.addDate as CKRecordValue
-    //        paperRecord["userDescription"] = paper.userDescription as CKRecordValue
-    //        paperRecord["expirationDate"] = paper.expirationDate as CKRecordValue
-    //        paperRecord["rectoImage"] = paperRectoImageData as CKRecordValue
-    //        paperRecord["versoImage"] = paperVersoImageData as CKRecordValue
-    //
-    //        CKContainer.default().publicCloudDatabase.save(paperRecord) { (record, err) in
-    //            DispatchQueue.main.async {
-    //                if let err = err {
-    //                    completion(.failure(err))
-    //                    return
-    //                }
-    //                guard let record = record else {
-    //                    completion(.failure(CloudKitHelperError.recordFailure))
-    //                    return
-    //                }
-    //                let recordId = record.recordID
-    //                guard
-    //                    let name = record["name"] as? String,
-    //                    let userDescription = record["userDescription"] as? String,
-    //                    let addDate = record.creationDate,
-    //                    let expirationDate = record["expirationDate"] as? Date,
-    //                    let rectoImage = record["rectoImage"] as? CKAsset,
-    //                    let versoImage = record["versoImage"] as? CKAsset
-    //                    else {
-    //                        completion(.failure(CloudKitHelperError.castFailure))
-    //                        return
-    //                }
-    //                let paper = Paper(recordId: recordId, name: name, userDescription: userDescription, rectoImage: rectoImage, versoImage: versoImage, addDate: addDate, expirationDate: expirationDate)
-    //                completion(.success(paper))
-    //            }
-    //        }
-    //    }
+    static func savePaper(paper: Paper, completion: @escaping(Result<Paper, Error>) ->Void) {
+        let paperRecord = CKRecord(recordType: RecordType.Paper)
+        
+        let paperRectoImageData: NSData = NSData(data: paper.rectoImage.jpegData(compressionQuality: 0.40)!)
+        let paperVersoImageData: NSData = NSData(data: paper.versoImage.jpegData(compressionQuality: 0.40)!)
+        
+        guard let paperRectoImageUrl = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(NSUUID().uuidString+".dat") else { return }
+        guard let paperVersoImageUrl = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(NSUUID().uuidString+".dat") else { return }
+        
+        do {
+            try paperRectoImageData.write(to: paperRectoImageUrl, options: [])
+            try paperVersoImageData.write(to: paperVersoImageUrl, options: [])
+        } catch let e as NSError {
+            print("Error! \(e)");
+            return
+        }
+        
+        
+        
+        paperRecord["name"] = paper.name as CKRecordValue
+        paperRecord["addDate"] = paper.addDate as CKRecordValue
+        paperRecord["userDescription"] = paper.userDescription as CKRecordValue
+        paperRecord["expirationDate"] = paper.expirationDate as CKRecordValue
+        paperRecord["rectoImage"] = CKAsset(fileURL: paperRectoImageUrl)
+        paperRecord["versoImage"] = CKAsset(fileURL: paperVersoImageUrl)
+        if paper.category != nil {
+            paperRecord["category"] = CKRecord.Reference(recordID: (paper.category!.recordId)!, action: .none)
+        }
+        
+        CKContainer.default().publicCloudDatabase.save(paperRecord) { (record, err) in
+            DispatchQueue.main.async {
+                if let err = err {
+                    completion(.failure(err))
+                    return
+                }
+                guard let record = record else {
+                    completion(.failure(CloudKitHelperError.recordFailure))
+                    return
+                }
+                let recordId = record.recordID
+                guard
+                    let name = record["name"] as? String,
+                    let userDescription = record["userDescription"] as? String,
+                    let addDate = record.creationDate,
+                    let expirationDate = record["expirationDate"] as? Date,
+                    let rectoImage = record["rectoImage"] as? CKAsset,
+                    let versoImage = record["versoImage"] as? CKAsset,
+                    let category = record["category"] as? CKRecord.Reference
+                    else {
+                        completion(.failure(CloudKitHelperError.castFailure))
+                        return
+                }
+                guard
+                    let rectoFileURL = rectoImage.fileURL,
+                    let versoFileURL = versoImage.fileURL
+                    else { return}
+                
+                let rectoImageData: Data
+                let versoImageData: Data
+                
+                do {
+                    rectoImageData = try Data(contentsOf: rectoFileURL)
+                    versoImageData = try Data(contentsOf: versoFileURL)
+                } catch { return }
+                
+                guard
+                    let rectoUIImage = UIImage(data: rectoImageData),
+                    let versoUIImage = UIImage(data: versoImageData)
+                    else { return }
+                
+                fetchCategoryById(recordID: category.recordID) { (result) in
+                    switch result {
+                    case .success(let paperCat):
+                        let paper = Paper(recordId: recordId, name: name, userDescription: userDescription, rectoImage: rectoUIImage, versoImage: versoUIImage, expirationDate: expirationDate, addDate: addDate, category: paperCat)
+                        
+                        do {
+                            try FileManager.default.removeItem(at: paperRectoImageUrl)
+                            try FileManager.default.removeItem(at: paperVersoImageUrl)
+                        }
+                        catch let error { print("La suppression des fichiers n'a pas aboutie: \(error)") }
+                        
+                        completion(.success(paper))
+                        
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+        }
+    }
     
-    // Fontion fetchPapers, permet de fetch tous les papers
+    // Fontion fetchPaper, permet de fetch un les paper avec une opération
     
-    static func fetchPapers(completion: @escaping(Result<Paper, Error>)  -> Void) {
+    static func fetchPaper(completion: @escaping(Result<Paper, Error>)  -> Void) {
         let predicate = NSPredicate(value: true)
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         let query = CKQuery(recordType: RecordType.Paper, predicate: predicate)
@@ -79,8 +133,8 @@ struct CloudKitHelper {
         
         let operation = CKQueryOperation(query: query)
         operation.desiredKeys = ["name", "userDescription",  "expirationDate" , "rectoImage", "versoImage", "creationDate", "category"]
-        operation.resultsLimit = 200
-        
+        operation.resultsLimit = 50
+        operation.qualityOfService = .userInteractive
         operation.recordFetchedBlock = { record in
             DispatchQueue.main.async {
                 let recordId = record.recordID
@@ -135,9 +189,65 @@ struct CloudKitHelper {
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
-    // Fonction fetchPaperCategories, permet de fetch toutes les catégories
     
-    static func fetchPaperCategories(completion: @escaping(Result<PaperCategory, Error>)  -> Void) {
+    // fetchPaperById
+    
+    static func fetchPaperById(recordID: CKRecord.ID, _ completion: @escaping(Result<Paper, Error>) -> Void) {
+        CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { (record, error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                
+                if let record = record {
+                    let recordId = record.recordID
+                    guard
+                        let name = record["name"] as? String,
+                        let userDescription = record["userDescription"] as? String,
+                        let category = record["category"] as? CKRecord.Reference,
+                        let addDate = record.creationDate,
+                        let expirationDate = record["expirationDate"] as? Date,
+                        let rectoImage = record["rectoImage"] as? CKAsset,
+                        let versoImage = record["versoImage"] as? CKAsset
+                        else { return }
+                    
+                    guard
+                        let rectoFileURL = rectoImage.fileURL,
+                        let versoFileURL = versoImage.fileURL
+                        else { return}
+                    
+                    let rectoImageData: Data
+                    let versoImageData: Data
+                    
+                    do {
+                        rectoImageData = try Data(contentsOf: rectoFileURL)
+                        versoImageData = try Data(contentsOf: versoFileURL)
+                    } catch { return }
+                    
+                    guard
+                        let rectoUIImage = UIImage(data: rectoImageData),
+                        let versoUIImage = UIImage(data: versoImageData)
+                        else { return }
+                    
+                    fetchCategoryById(recordID: category.recordID) { (result) in
+                        switch result {
+                        case .success(let paperCat):
+                            let paper = Paper(recordId: recordId, name: name, userDescription: userDescription, rectoImage: rectoUIImage, versoImage: versoUIImage, expirationDate: expirationDate, addDate: addDate, category: paperCat)
+                            completion(.success(paper))
+                        case .failure(let error):
+                            print(error.localizedDescription)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    // Fonction fetchPaperCategory, permet de fetch une catégorie avec une opération
+    
+    static func fetchPaperCategory(completion: @escaping(Result<PaperCategory, Error>)  -> Void) {
         let predicate = NSPredicate(value: true)
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         let query = CKQuery(recordType: RecordType.PaperCategory, predicate: predicate)
@@ -169,6 +279,8 @@ struct CloudKitHelper {
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
+    
+    
     // Fonction fetchCategoryById, permet de fetch une categorie avec son Id
     
     static func fetchCategoryById(recordID: CKRecord.ID, _ completion: @escaping(Result<PaperCategory, Error>) -> Void) {
@@ -190,6 +302,96 @@ struct CloudKitHelper {
         }
     }
     
+    // function deletePaper, permet de delete un paper
     
+    static func deletePaper(recordID: CKRecord.ID, completion: @escaping (Result<CKRecord.ID, Error>) -> Void) {
+        CKContainer.default().publicCloudDatabase.delete(withRecordID: recordID) { (recordID, err) in
+            DispatchQueue.main.async {
+                if let err = err {
+                    completion(.failure(err))
+                    return
+                }
+                guard let recordID = recordID else {
+                    completion(.failure(CloudKitHelperError.recordIdFailure))
+                    return
+                }
+                completion(.success(recordID))
+            }
+        }
+    }
     
+    // function modifyPaper, permet de modifier un paper
+    
+    static func modifyPaper(paper: Paper, completion: @escaping (Result<Paper, Error>) -> ()) {
+        guard let recordID = paper.recordId else { return }
+        CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { record, err in
+            if let err = err {
+                DispatchQueue.main.async {
+                    completion(.failure(err))
+                }
+                return
+            }
+            guard let record = record else {
+                DispatchQueue.main.async {
+                    completion(.failure(CloudKitHelperError.recordFailure))
+                }
+                return
+            }
+            
+
+            CKContainer.default().publicCloudDatabase.save(record) { (record, err) in
+                DispatchQueue.main.async {
+                    if let err = err {
+                        completion(.failure(err))
+                        return
+                    }
+                    guard let record = record else {
+                        completion(.failure(CloudKitHelperError.recordFailure))
+                        return
+                    }
+                    let recordID = record.recordID
+                    guard
+                        let name = record["name"] as? String,
+                        let userDescription = record["userDescription"] as? String,
+                        let category = record["category"] as? CKRecord.Reference,
+                        let addDate = record.creationDate,
+                        let expirationDate = record["expirationDate"] as? Date,
+                        let rectoImage = record["rectoImage"] as? CKAsset,
+                        let versoImage = record["versoImage"] as? CKAsset
+                    else {
+                        completion(.failure(CloudKitHelperError.castFailure))
+                        return
+                    }
+                    
+                    guard
+                        let rectoFileURL = rectoImage.fileURL,
+                        let versoFileURL = versoImage.fileURL
+                        else { return}
+                    
+                    let rectoImageData: Data
+                    let versoImageData: Data
+                    
+                    do {
+                        rectoImageData = try Data(contentsOf: rectoFileURL)
+                        versoImageData = try Data(contentsOf: versoFileURL)
+                    } catch { return }
+                    
+                    guard
+                        let rectoUIImage = UIImage(data: rectoImageData),
+                        let versoUIImage = UIImage(data: versoImageData)
+                        else { return }
+                    
+                    fetchCategoryById(recordID: category.recordID) { (result) in
+                        switch result {
+                        case .success(let paperCat):
+                            let paper = Paper(recordId: recordID, name: name, userDescription: userDescription, rectoImage: rectoUIImage, versoImage: versoUIImage, expirationDate: expirationDate, addDate: addDate, category: paperCat)
+                            completion(.success(paper))
+                        case .failure(let error):
+                            print(error.localizedDescription)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

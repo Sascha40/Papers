@@ -1,6 +1,6 @@
 //
-//  Papers.swift
-//  Papers
+//  Paper.swift
+//  Paper
 //
 //  Created by Sascha Sallès on 22/05/2020.
 //  Copyright © 2020 saschasalles. All rights reserved.
@@ -10,8 +10,8 @@ import SwiftUI
 import CloudKit
 import Foundation
 
-struct Paper: Identifiable {
-    var id = UUID()
+struct Paper: Hashable, Equatable, Identifiable {
+    var id =  UUID()
     var recordId: CKRecord.ID?
     var name: String
     var userDescription: String

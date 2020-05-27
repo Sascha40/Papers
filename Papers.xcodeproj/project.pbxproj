@@ -15,10 +15,13 @@
 		2B35D61A24782B0B00D7C8D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B35D61824782B0B00D7C8D3 /* LaunchScreen.storyboard */; };
 		2B35D62424782BE800D7C8D3 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B35D62324782BE800D7C8D3 /* CloudKit.framework */; };
 		2B5D4BEE247B0CC5000D1FEA /* DocumentPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5D4BED247B0CC5000D1FEA /* DocumentPickerView.swift */; };
-		2B5D4BF0247B4114000D1FEA /* hexadecimalColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5D4BEF247B4114000D1FEA /* hexadecimalColors.swift */; };
+		2B5D4BF0247B4114000D1FEA /* ext_hexadecimalColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5D4BEF247B4114000D1FEA /* ext_hexadecimalColors.swift */; };
 		2B7CD4802479E1D900BA4E67 /* AddPaperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7CD47F2479E1D900BA4E67 /* AddPaperView.swift */; };
 		2B7CD484247AB31300BA4E67 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7CD483247AB31300BA4E67 /* ImagePickerView.swift */; };
-		2BF8401B24785D9E007638DF /* Papers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF8401A24785D9E007638DF /* Papers.swift */; };
+		2B80FBE6247C401A006CF4A9 /* AnimatedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B80FBE5247C401A006CF4A9 /* AnimatedButtonStyle.swift */; };
+		2B80FBEF247D64A5006CF4A9 /* Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B80FBEE247D64A5006CF4A9 /* Background.swift */; };
+		2B80FBF1247DE3AB006CF4A9 /* PinchableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B80FBF0247DE3AB006CF4A9 /* PinchableImageView.swift */; };
+		2BF8401B24785D9E007638DF /* Paper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF8401A24785D9E007638DF /* Paper.swift */; };
 		2BF8401D24786130007638DF /* CloudKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF8401C24786130007638DF /* CloudKitHelper.swift */; };
 		2BF84021247892A4007638DF /* PaperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF84020247892A4007638DF /* PaperView.swift */; };
 		2BF84024247958B9007638DF /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF84023247958B9007638DF /* LoadingView.swift */; };
@@ -42,10 +45,13 @@
 		2B35D61B24782B0B00D7C8D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2B35D62324782BE800D7C8D3 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		2B5D4BED247B0CC5000D1FEA /* DocumentPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerView.swift; sourceTree = "<group>"; };
-		2B5D4BEF247B4114000D1FEA /* hexadecimalColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hexadecimalColors.swift; sourceTree = "<group>"; };
+		2B5D4BEF247B4114000D1FEA /* ext_hexadecimalColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ext_hexadecimalColors.swift; sourceTree = "<group>"; };
 		2B7CD47F2479E1D900BA4E67 /* AddPaperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPaperView.swift; sourceTree = "<group>"; };
 		2B7CD483247AB31300BA4E67 /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
-		2BF8401A24785D9E007638DF /* Papers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Papers.swift; sourceTree = "<group>"; };
+		2B80FBE5247C401A006CF4A9 /* AnimatedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedButtonStyle.swift; sourceTree = "<group>"; };
+		2B80FBEE247D64A5006CF4A9 /* Background.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
+		2B80FBF0247DE3AB006CF4A9 /* PinchableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchableImageView.swift; sourceTree = "<group>"; };
+		2BF8401A24785D9E007638DF /* Paper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paper.swift; sourceTree = "<group>"; };
 		2BF8401C24786130007638DF /* CloudKitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitHelper.swift; sourceTree = "<group>"; };
 		2BF8401F24787AA8007638DF /* Papers.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Papers.entitlements; sourceTree = "<group>"; };
 		2BF84020247892A4007638DF /* PaperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaperView.swift; sourceTree = "<group>"; };
@@ -126,10 +132,22 @@
 		2B35D6272478349A00D7C8D3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				2BF8401A24785D9E007638DF /* Papers.swift */,
+				2BF8401A24785D9E007638DF /* Paper.swift */,
 				2BF8402E247969E5007638DF /* PaperCategory.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		2B80FBED247D643B006CF4A9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2BF84023247958B9007638DF /* LoadingView.swift */,
+				2B80FBEE247D64A5006CF4A9 /* Background.swift */,
+				2B5D4BED247B0CC5000D1FEA /* DocumentPickerView.swift */,
+				2B7CD483247AB31300BA4E67 /* ImagePickerView.swift */,
+				2B80FBE5247C401A006CF4A9 /* AnimatedButtonStyle.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		2BF84029247967E2007638DF /* Helpers */ = {
@@ -137,7 +155,7 @@
 			children = (
 				2BF8401C24786130007638DF /* CloudKitHelper.swift */,
 				2BF84027247963B1007638DF /* Constants.swift */,
-				2B5D4BEF247B4114000D1FEA /* hexadecimalColors.swift */,
+				2B5D4BEF247B4114000D1FEA /* ext_hexadecimalColors.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -154,15 +172,14 @@
 		2BF8402B24796824007638DF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2B80FBED247D643B006CF4A9 /* Extensions */,
 				2BF84034247986B4007638DF /* Menu */,
 				2BF84025247961B9007638DF /* PapersListView.swift */,
+				2B80FBF0247DE3AB006CF4A9 /* PinchableImageView.swift */,
 				2BF845662479907B005FBE0F /* EditPaperView.swift */,
-				2B5D4BED247B0CC5000D1FEA /* DocumentPickerView.swift */,
 				2B7CD47F2479E1D900BA4E67 /* AddPaperView.swift */,
-				2B7CD483247AB31300BA4E67 /* ImagePickerView.swift */,
 				2B35D61124782B0A00D7C8D3 /* HomeView.swift */,
 				2BF84020247892A4007638DF /* PaperView.swift */,
-				2BF84023247958B9007638DF /* LoadingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -247,21 +264,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2BF8401B24785D9E007638DF /* Papers.swift in Sources */,
+				2BF8401B24785D9E007638DF /* Paper.swift in Sources */,
 				2B5D4BEE247B0CC5000D1FEA /* DocumentPickerView.swift in Sources */,
 				2BF84026247961B9007638DF /* PapersListView.swift in Sources */,
 				2B35D60B24782B0A00D7C8D3 /* AppDelegate.swift in Sources */,
 				2B35D61224782B0A00D7C8D3 /* HomeView.swift in Sources */,
 				2BF8401D24786130007638DF /* CloudKitHelper.swift in Sources */,
 				2BF8402D24796868007638DF /* PapersViewModel.swift in Sources */,
+				2B80FBEF247D64A5006CF4A9 /* Background.swift in Sources */,
 				2B7CD4802479E1D900BA4E67 /* AddPaperView.swift in Sources */,
 				2BF84036247986C9007638DF /* MenuItemView.swift in Sources */,
-				2B5D4BF0247B4114000D1FEA /* hexadecimalColors.swift in Sources */,
+				2B80FBF1247DE3AB006CF4A9 /* PinchableImageView.swift in Sources */,
+				2B5D4BF0247B4114000D1FEA /* ext_hexadecimalColors.swift in Sources */,
 				2BF845672479907B005FBE0F /* EditPaperView.swift in Sources */,
 				2B35D60D24782B0A00D7C8D3 /* SceneDelegate.swift in Sources */,
 				2BF84024247958B9007638DF /* LoadingView.swift in Sources */,
 				2BF84021247892A4007638DF /* PaperView.swift in Sources */,
 				2B7CD484247AB31300BA4E67 /* ImagePickerView.swift in Sources */,
+				2B80FBE6247C401A006CF4A9 /* AnimatedButtonStyle.swift in Sources */,
 				2BF8403324798485007638DF /* PaperCategoryViewModel.swift in Sources */,
 				2BF8402F247969E5007638DF /* PaperCategory.swift in Sources */,
 				2BF84028247963B1007638DF /* Constants.swift in Sources */,
