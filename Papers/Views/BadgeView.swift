@@ -11,7 +11,7 @@ import SwiftUI
 struct BadgeView: View {
     var color: Color
     var text: String
-    #if os(macOS)
+    #if !os(macOS)
     var logo: String
     #endif
     
