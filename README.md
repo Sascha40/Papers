@@ -15,7 +15,10 @@ De la carte d'identité, au factures, en passant par le permis de conduire, Pape
 * Langage : Swift 5
 * Logiciel : Xcode 11.4
 
+## Targets disponibles
 
+* iOS 13.5
+* macOS 10.15.4
 ### Doc Cloudkit
 
 #### Initialisation 
