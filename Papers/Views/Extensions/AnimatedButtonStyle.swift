@@ -12,10 +12,11 @@ struct AnimatedButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
             .foregroundColor(Color.white)
-            .padding()
-            .background(configuration.isPressed ? Color(red: 110/255, green: 203/255, blue: 200/255) : Color(red: 69/255, green: 140/255, blue: 157/255))
-            .cornerRadius(configuration.isPressed ? 20 : 15)
-            .scaleEffect(configuration.isPressed ? 1.2 : 1.0)
+            .font(Font.custom("Avenir-black", size: 17))
+            .padding(configuration.isPressed ?  13 : 12)
+            .background(configuration.isPressed ? Color(red: 110/255, green: 203/255, blue: 200/255) : Color(hex: "#82c6cf"))
+            .cornerRadius(configuration.isPressed ? 30 : 25)
+            .scaleEffect(configuration.isPressed ? 1.5 : 1.0)
     }
 }
 

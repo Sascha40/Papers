@@ -9,7 +9,7 @@
 import SwiftUI
 
 enum ActiveAlert {
-    case success, error
+    case success, error, notSigned
 }
 
 struct AddPaperView: View {
@@ -21,7 +21,6 @@ struct AddPaperView: View {
     
     @EnvironmentObject var papers: PapersViewModel
     @EnvironmentObject var categories: PaperCategoryViewModel
-    
     
     @State private var selectedCategory =  3
     @State private var name:String = ""
@@ -53,13 +52,13 @@ struct AddPaperView: View {
                             }
                             VStack {
                                 HStack {
-                                    Text("Type")
-                                        .font(Font.system(size: 25))
+                                    Text("Catégorie")
+                                        .font(Font.custom("Avenir-black", size: 25))
                                         .bold()
                                     Spacer()
                                 }.padding(.top)
                                 
-                                Picker(selection: self.$selectedCategory, label: Text("Type")) {
+                                Picker(selection: self.$selectedCategory, label: Text("Catégorie")) {
                                     ForEach(0 ..< self.categories.paperCategory.count) {
                                         Text(self.categories.paperCategory[$0].name)
                                     }
@@ -70,7 +69,7 @@ struct AddPaperView: View {
                                 
                                 VStack (alignment: .leading) {
                                     Text("Informations")
-                                        .font(Font.system(size: 25))
+                                        .font(Font.custom("Avenir-black", size: 25))
                                         .bold()
                                         .padding(.top)
                                     Text("Nom")
@@ -103,7 +102,7 @@ struct AddPaperView: View {
                                 
                                 HStack {
                                     Text("Image(s)")
-                                        .font(Font.system(size: 25))
+                                        .font(Font.custom("Avenir-black", size: 25))
                                         .bold()
                                     Spacer()
                                 }
@@ -115,7 +114,7 @@ struct AddPaperView: View {
                                         })
                                         Image(uiImage: self.rectoImage!)
                                             .resizable()
-                                            .aspectRatio(contentMode: .fill)
+                                            .aspectRatio(self.rectoImage!.size, contentMode: .fill)
                                             .frame(width: 80, height: 60)
                                             .cornerRadius(15)
                                             
@@ -143,9 +142,10 @@ struct AddPaperView: View {
                                         
                                         Image(uiImage: self.versoImage!)
                                             .resizable()
-                                            .aspectRatio(contentMode: .fill)
+                                            .aspectRatio(self.versoImage!.size, contentMode: .fill)
                                             .frame(width: 80, height: 60)
                                             .cornerRadius(15)
+                                            
                                             
                                             .actionSheet(isPresented: self.$showVersoActionSheet) { () -> ActionSheet in
                                                 ActionSheet(title: Text("Selectionnez une image"), message:
@@ -171,6 +171,20 @@ struct AddPaperView: View {
                                 Button(action: {
                                     if !self.name.isEmpty && !self.description.isEmpty {
                                         self.showLoadingView = true
+                                        
+                                        CloudKitHelper.verifyIfUserIsSignedIn { (result) in
+                                            switch result {
+                                            case .success(let value):
+                                                self.activeAlert = .notSigned
+                                                self.showFormAlert = value
+                                                if value == true {
+                                                    self.showLoadingView = false
+                                                }
+                                            case .failure(let err):
+                                                print(err.localizedDescription)
+                                            }
+                                        }
+                                        
                                         self.papers.papers.removeAll()
                                         CloudKitHelper.fetchPaper { (result) in
                                             switch result {
@@ -216,6 +230,9 @@ struct AddPaperView: View {
                                         case .success:
                                             return Alert(title: Text("C'est un succès ! 🎉"), message: Text("Votre paper à bien été ajouté"),
                                                          dismissButton: .default(Text("Ok")))
+                                        case .notSigned:
+                                            return Alert(title: Text("Vous n'êtes pas connecté à icloud 🧐"), message: Text("Connectez vous à iCloud pour enregistrer des papers. Pour cela ouvrez l’app Réglages > Se connecter à (appareil) puis identifiez-vous"),
+                                                         dismissButton: .default(Text("Ok")))
                                         }
                                     }
                                 }.buttonStyle(AnimatedButtonStyle())
@@ -233,8 +250,8 @@ struct AddPaperView: View {
                         }
                     }
                     .onAppear {
-                        self.rectoImage = UIImage(named: "ph_recto")
-                        self.versoImage = UIImage(named: "ph_verso")
+                        self.rectoImage = UIImage(named: "ph_recto")!
+                        self.versoImage = UIImage(named: "ph_verso")!
                     }
                     .navigationBarTitle("Ajouter")
                 }

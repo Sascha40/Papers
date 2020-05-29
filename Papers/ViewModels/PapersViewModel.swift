@@ -9,24 +9,31 @@
 
 import Foundation
 import CloudKit
+import SwiftUI
 
 class PapersViewModel: ObservableObject {
     @Published var papers =  [Paper]()
     @Published var loading = true
+    @Published var sortedPapersByDate = [Paper]()
     
     init() {
         fetchPapers()
+        
     }
     
     private func fetchPapers() {
         CloudKitHelper.fetchPaper { (result) in
             switch result {
             case .success(let newPaper):
-                self.papers.append(newPaper)
                 self.loading = false
+                self.papers.append(newPaper)
             case .failure(let err):
+                self.loading = false
                 print(err.localizedDescription)
             }
         }
     }
+
+    
+    
 }

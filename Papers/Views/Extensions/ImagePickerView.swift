@@ -15,7 +15,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let viewController = UIImagePickerController()
-        viewController.allowsEditing = false
+        viewController.allowsEditing = true
         viewController.sourceType = sourceType == 1 ? .photoLibrary : .camera
         viewController.delegate = context.coordinator
         return viewController

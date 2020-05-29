@@ -11,31 +11,33 @@ import SwiftUI
 struct MenuItemView: View {
     var color: Color
     var text: String
-    
+    #if !os(macOS)
+    var logo: String
+    #endif
     
     var body: some View {
         color
-            .frame(height: 80)
+            .frame(width:160, height: 110)
             .shadow(radius: 10)
-            .cornerRadius(15)
+            .cornerRadius(20)
             .overlay(
                 VStack {
+                    #if !os(macOS)
+                    Image(systemName: logo)
+                    .font(.system(size: 25))
+                        .foregroundColor(.white)
+                    #endif
+                    
                     Text(text)
                         .fontWeight(.bold)
-                        .font(Font.system(size: 20))
+                        .font(Font.custom("Avenir-black", size: 18))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
                         .lineLimit(3)
                 }
-                .padding(10)
+                .padding(3)
         )
             
     }
 }
 
-struct MenuItemView_Previews: PreviewProvider {
-    static var previews: some View {
-        MenuItemView(color: Color(hex: "#ccc"), text: "Shopping")
-            .previewLayout(.sizeThatFits)
-    }
-}

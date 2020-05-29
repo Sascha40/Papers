@@ -15,6 +15,7 @@ struct PaperCategory: Identifiable, Hashable {
     var recordId: CKRecord.ID?
     var name: String
     var color: Color
+    var logo: String
 }
     
     

@@ -1,8 +1,8 @@
 //
 //  CloudKitHelper.swift
-//  Papers
+//  MacPapers
 //
-//  Created by Sascha Sallès on 22/05/2020.
+//  Created by Sascha Sallès on 29/05/2020.
 //  Copyright © 2020 saschasalles. All rights reserved.
 //
 
@@ -35,8 +35,8 @@ struct CloudKitHelper {
     static func savePaper(paper: Paper, completion: @escaping(Result<Paper, Error>) ->Void) {
         let paperRecord = CKRecord(recordType: RecordType.Paper)
         
-        let paperRectoImageData: NSData = NSData(data: paper.rectoImage.jpegData(compressionQuality: 0.30)!)
-        let paperVersoImageData: NSData = NSData(data: paper.versoImage.jpegData(compressionQuality: 0.30)!)
+        let paperRectoImageData: NSData = NSData(data: paper.rectoImage.tiffRepresentation!)
+        let paperVersoImageData: NSData = NSData(data: paper.versoImage.tiffRepresentation!)
         
         guard let paperRectoImageUrl = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(NSUUID().uuidString+".dat") else { return }
         guard let paperVersoImageUrl = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(NSUUID().uuidString+".dat") else { return }
@@ -96,8 +96,8 @@ struct CloudKitHelper {
                 } catch { return }
                 
                 guard
-                    let rectoUIImage = UIImage(data: rectoImageData),
-                    let versoUIImage = UIImage(data: versoImageData)
+                    let rectoUIImage = NSImage(data: rectoImageData),
+                    let versoUIImage = NSImage(data: versoImageData)
                     else { return }
                 
                 fetchCategoryById(recordID: category.recordID) { (result) in
@@ -160,8 +160,8 @@ struct CloudKitHelper {
                 } catch { return }
                 
                 guard
-                    let rectoUIImage = UIImage(data: rectoImageData),
-                    let versoUIImage = UIImage(data: versoImageData)
+                    let rectoUIImage = NSImage(data: rectoImageData),
+                    let versoUIImage = NSImage(data: versoImageData)
                     else { return }
                 
                 fetchCategoryById(recordID: category.recordID) { (result) in
@@ -224,8 +224,8 @@ struct CloudKitHelper {
                     } catch { return }
                     
                     guard
-                        let rectoUIImage = UIImage(data: rectoImageData),
-                        let versoUIImage = UIImage(data: versoImageData)
+                        let rectoUIImage = NSImage(data: rectoImageData),
+                        let versoUIImage = NSImage(data: versoImageData)
                         else { return }
                     
                     fetchCategoryById(recordID: category.recordID) { (result) in
@@ -338,8 +338,8 @@ struct CloudKitHelper {
                 return
             }
             
-            let paperRectoImageData: NSData = NSData(data: paper.rectoImage.jpegData(compressionQuality: 0.30)!)
-            let paperVersoImageData: NSData = NSData(data: paper.versoImage.jpegData(compressionQuality: 0.30)!)
+            let paperRectoImageData: NSData = NSData(data: paper.rectoImage.tiffRepresentation!)
+            let paperVersoImageData: NSData = NSData(data: paper.versoImage.tiffRepresentation!)
            
             
             guard let paperRectoImageUrl = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(NSUUID().uuidString+".dat") else { return }
@@ -394,7 +394,7 @@ struct CloudKitHelper {
                         rectoImageData = try Data(contentsOf: rectoFileURL)
                         versoImageData = try Data(contentsOf: versoFileURL)
                     } catch { return }
-                    guard let rectoUIImage = UIImage(data: rectoImageData), let versoUIImage = UIImage(data: versoImageData) else { return }
+                    guard let rectoUIImage = NSImage(data: rectoImageData), let versoUIImage = NSImage(data: versoImageData) else { return }
                     
                     fetchCategoryById(recordID: category.recordID) { (result) in
                         switch result {

@@ -1,15 +1,16 @@
+
 //
 //  PaperView.swift
-//  Papers
+//  MacPapers
 //
-//  Created by Sascha Sallès on 23/05/2020.
+//  Created by Sascha Sallès on 29/05/2020.
 //  Copyright © 2020 saschasalles. All rights reserved.
 //
 
 import SwiftUI
 
 struct PaperView: View {
-    
+
     static let taskDateFormat: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "fr_FR")
@@ -36,14 +37,14 @@ struct PaperView: View {
                 HStack(spacing: 10) {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 20) {
-                            Image(uiImage: self.passedPaper.rectoImage)
+                            Image(nsImage: self.passedPaper.rectoImage)
                                 .resizable()
                                 .aspectRatio(self.passedPaper.rectoImage.size, contentMode: .fill)
                                 .frame(width: 300, height: 230)
                                 .cornerRadius(15)
                             
                             
-                            Image(uiImage: self.passedPaper.versoImage)
+                            Image(nsImage: self.passedPaper.versoImage)
                                 .resizable()
                                 .aspectRatio(self.passedPaper.versoImage.size, contentMode: .fill)
                                 .frame(width: 300, height: 230)
@@ -80,41 +81,7 @@ struct PaperView: View {
                 }
                 .padding()
                 Spacer()
-                Button(action: {
-                    guard let recordId = self.passedPaper.recordId else { return }
-                    CloudKitHelper.deletePaper(recordID: recordId) { (result) in
-                        switch result {
-                        case .success(let recordID):
-                            self.papers.papers.removeAll { (paper) -> Bool in
-                                return paper.recordId == recordID
-                            }
-                        case .failure(let err):
-                            print(err.localizedDescription)
-                        }
-                    }
-                }){
-                    HStack{
-                        Image(systemName: "trash")
-                        Text("Supprimer")
-                    }
-                    .frame(height: 20)
-                    .padding()
-                    .foregroundColor(.red)
-                }.cornerRadius(30)
             }
         }
-        .navigationBarTitle(Text(self.passedPaper.name), displayMode: .inline)
-        .navigationBarItems(trailing: NavigationLink(destination: EditPaperView(paper: self.passedPaper), label:{
-            Text("Modifier")
-        }))
     }
 }
-
-
-
-//
-//struct PaperView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PaperView(passedPaper: Paper(name: "test", userDescription: "test", rectoImage: UIImage(named: "recto")!, versoImage: UIImage(named: "verso")!, expirationDate: Date(), addDate: Date()))
-//    }
-//}
