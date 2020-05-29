@@ -9,7 +9,7 @@ De la carte d'identité, au factures, en passant par le permis de conduire, Pape
 
 ## Technologies utilisées
 
-* Framework Front-End : SwiftUI, UIKit 
+* Framework Front-End : SwiftUI, UIKit, AppKit 
 * Framework Back-End :  Core-Data, CloudKit, Combine
 * Architecture du projet : MVVM
 * Langage : Swift 5
