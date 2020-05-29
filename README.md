@@ -1,6 +1,9 @@
 # Papers (French Project)
 > Auteur / Développeur : Sascha Sallès, www.saschasalles.com
 
+## Aux correcteurs Ynov : Le projet étant encore en développement, j'utilise la branche Dev
+
+
 ## Description du projet
 
 Papers est une application "cross-platform" apple ayant pour but de simplifier la vie des utilisateurs.  
