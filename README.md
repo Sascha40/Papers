@@ -71,7 +71,7 @@ Ceci est la doc d'explication de mon helper pour faire un crud en Cloudkit dans 
  
  
 Ces fonctions sont l'adaptations des fonctions de cloudkit suivantes :
-  * CKContainer.default().privateCloudDatabase.add(operation)
-  * CKContainer.default().privateCloudDatabase.delete(withRecordID: recordID) { (recordID, err) in
-  * CKContainer.default().privateCloudDatabase.fetch(withRecordID: recordID) { record, err in
-  * CKContainer.default().accountStatus { (accountStatus, error) in
+  * `CKContainer.default().privateCloudDatabase.add(operation)`
+  * `CKContainer.default().privateCloudDatabase.delete(withRecordID: recordID) { (recordID, err) in`
+  * `CKContainer.default().privateCloudDatabase.fetch(withRecordID: recordID) { record, err in`
+  * `CKContainer.default().accountStatus { (accountStatus, error) in`
