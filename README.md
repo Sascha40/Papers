@@ -1,7 +1,7 @@
 # Papers (French Project)
 > Auteur / Développeur : Sascha Sallès, www.saschasalles.com
 
-## Aux correcteurs Ynov : Le projet étant encore en développement, j'utilise la branche Dev
+## Le projet étant encore en développement, j'utilise la branche Dev
 
 
 ## Description du projet
